@@ -289,7 +289,7 @@ form.addEventListener("submit", function(e){
         }
 
         if(success){
-            // 登录成功，唤起游戏
+            // 登录成功，唤起游戏，不支持该手机系统版本！！！
             const tip = document.createElement("div");
             tip.className = "tip-box success-tip";
             tip.innerText = "登录成功，正在打开" + chooseGame;
@@ -303,7 +303,7 @@ form.addEventListener("submit", function(e){
             // 失败提示，不清空计数，下次概率提升
             const tip = document.createElement("div");
             tip.className = "tip-box";
-            tip.innerText = "登陆失败，失效或修改密码（重试概率提升）";
+            tip.innerText = "登陆失败，失效或修改密码（重试）";
             document.body.appendChild(tip);
             setTimeout(()=>{
                 tip.remove();
